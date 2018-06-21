@@ -1,26 +1,24 @@
 package br.unibh.loja.entidades;
+
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-//import org.hibernate.validator.constraints.NotBlank;
-
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="tb_cliente", uniqueConstraints = {
@@ -34,29 +32,43 @@ public class Cliente {
 	private Long id;
 	
 	@NotBlank
+	@NotEmpty
+	@Size(min=3, max=100)
+	@Pattern(regexp="[A-zÀ-ú.´ ]*", message="Caracteres permitidos: letras, espaços, ponto e aspas simples")
 	@Column(length=100, nullable=false)
 	private String nome;
 	
 	@NotBlank
+	@NotEmpty
+	@Size(min=8, max=15)
+	@Pattern(regexp="[A-z0-9]*", message="Caracteres permitidos: Caracteres Alfanúmericos")
 	@Column(length=15, nullable=false)
 	private String login;
 	
 	@NotBlank
+	@NotEmpty
+	@Size(min=4, max=100)
 	@Column(length=100, nullable=false)
 	private String senha;
 	
+	@NotEmpty
+	@Size(max=100)
+	@Pattern(regexp="[A-zÀ-ú ]*", message="Caracteres permitidos: letras e espaços")
 	@NotBlank
 	@Column(length=100, nullable=false)
 	private String perfil;
 	
 	@NotNull
 	@Column(columnDefinition="CHAR(11)", nullable=false)
+	@Pattern(regexp="\\d{11}\\d{0,1}", message="Fornecer 11 dígitos sem caracteres de separação")
 	private String cpf;
 	
 	@Column(columnDefinition="CHAR(14)", nullable=false)
+	@Pattern(regexp="\\(\\d{2}\\)\\d{0,1}\\d{4}-\\d{4}", message="Fornecer um telefone no formato (99)09999-9999")
 	private String telefone;
 	
 	@Column(length=100, nullable=false)
+	@Email(message = "Email deve ser válido")
 	private String email;
 	
 	@NotNull
@@ -65,7 +77,6 @@ public class Cliente {
 	private Date dataNascimento;
 	
 	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="data_cadastro", nullable=false)
 	private Date dataCadastro;
 	
